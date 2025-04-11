@@ -29,7 +29,9 @@ func loadRoutes() *gin.Engine {
 		c.Status(http.StatusOK)
 	})
 
-	router.RegisterRoutes(r)
+	// Use the automatic route registration instead of manual registration
+	// router.RegisterRoutes(r)
+	router.AutoRegisterRoutes(r)
 
 	return r
 }

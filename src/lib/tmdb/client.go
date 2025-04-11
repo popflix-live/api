@@ -6,17 +6,17 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	
+
 	models "github.com/popflix-live/api/src/lib/models/tmdb"
 )
 
 const (
-	BaseURL = "https://api.themoviedb.org/3"
+	BaseURL      = "https://api.themoviedb.org/3"
 	ImageBaseURL = "https://image.tmdb.org/t/p/original"
 )
 
 type Client struct {
-	apiKey string
+	apiKey     string
 	httpClient *http.Client
 }
 
@@ -27,22 +27,22 @@ func New() (*Client, error) {
 	}
 
 	return &Client{
-		apiKey: apiKey,
+		apiKey:     apiKey,
 		httpClient: &http.Client{},
 	}, nil
 }
 
 func (c *Client) SearchTV(query string) (*models.SearchResponse, error) {
-	endpoint := fmt.Sprintf("%s/search/tv?api_key=%s&query=%s", 
+	endpoint := fmt.Sprintf("%s/search/tv?api_key=%s&query=%s",
 		BaseURL, c.apiKey, url.QueryEscape(query))
-	
+
 	return c.getSearchResults(endpoint)
 }
 
 func (c *Client) SearchMulti(query string) (*models.SearchResponse, error) {
-	endpoint := fmt.Sprintf("%s/search/multi?api_key=%s&query=%s", 
+	endpoint := fmt.Sprintf("%s/search/multi?api_key=%s&query=%s",
 		BaseURL, c.apiKey, url.QueryEscape(query))
-	
+
 	return c.getSearchResults(endpoint)
 }
 

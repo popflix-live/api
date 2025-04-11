@@ -103,3 +103,7 @@ func abs(x float64) float64 {
 	}
 	return x
 }
+
+func GetRoute() (string, string, gin.HandlerFunc) {
+	return "GET", "/anime/backdrop/:id", GetHandler
+}
