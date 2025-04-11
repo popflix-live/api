@@ -7,10 +7,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 )
 
-require (
-	github.com/PuerkitoBio/goquery v1.10.2 // indirect
-	github.com/andybalholm/cascadia v1.3.3 // indirect
-)
+require github.com/google/go-cmp v0.6.0 // indirect
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect

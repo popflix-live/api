@@ -1,25 +1,30 @@
 package config
 
 import (
-	"github.com/gin-gonic/gin"
-
+	animeBackdrops "github.com/popflix-live/api/src/application/handlers/anime/backdrop"
 	animeGenre "github.com/popflix-live/api/src/application/handlers/anime/genre/list"
+	"github.com/popflix-live/api/src/lib/models/router"
 )
 
-type RouteConfig struct {
-	Method      string
-	Path        string
-	Handler     func(*gin.Context)
-	Description string
-}
-
-func GetRoutes() []RouteConfig {
-	return []RouteConfig{
+func GetRoutes() []router.RouteConfig {
+	return []router.RouteConfig{
 		{
 			Method:      "GET",
 			Path:        "/anime/genre/list",
 			Handler:     animeGenre.GetHandler,
 			Description: "Get a list of anime genres",
+		},
+		{
+			Method:      "GET",
+			Path:        "/anime/backdrop/:id",
+			Handler:     animeBackdrops.GetHandler,
+			Description: "Get backdrop images for a movie or TV show by ID",
+		},
+		{
+			Method:      "GET",
+			Path:        "/anime/backdrop",
+			Handler:     animeBackdrops.GetHandler,
+			Description: "Get backdrop images for a movie or TV show by name",
 		},
 	}
 }

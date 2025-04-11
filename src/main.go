@@ -7,7 +7,6 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/popflix-live/api/src/application"
-	"github.com/popflix-live/api/src/lib/external"
 )
 
 func main() {
@@ -15,8 +14,6 @@ func main() {
 	if err != nil {
 		log.Println("Warning: Error loading .env file:", err)
 	}
-
-	external.StartConsumetAPI()
 
 	// Database connection will be added later
 	// dbClient, err := db.ConnectDB()

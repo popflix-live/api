@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	routesData "github.com/popflix-live/api/src/lib/data"
+	"github.com/popflix-live/api/src/lib/models/router"
 )
 
 func RegisterRoutes(r *gin.Engine) {
@@ -15,7 +16,7 @@ func RegisterRoutes(r *gin.Engine) {
 	}
 }
 
-func registerRoute(r *gin.Engine, route routesData.RouteConfig) {
+func registerRoute(r *gin.Engine, route router.RouteConfig) {
 	switch route.Method {
 	case "GET":
 		r.GET(route.Path, func(c *gin.Context) {
