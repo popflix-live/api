@@ -2,77 +2,37 @@ package genre
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	httpClient "github.com/popflix-live/api/src/lib/http"
+	instance "github.com/popflix-live/api/src/lib/http"
 )
 
 type Genre struct {
-	ID    string `json:"id"`
-	Title string `json:"title"`
+	MalID int    `json:"mal_id"`
+	Name  string `json:"name"`
 	Count int    `json:"count"`
 }
 
+type GenreResponse struct {
+	Data []Genre `json:"data"`
+}
+
 func GetHandler(c *gin.Context) {
-	client := httpClient.NewHttpClient("")
+	url := "https://api.jikan.moe/v4/genres/anime"
 
-	resp, err := client.Get("http://localhost:3000/anime/gogoanime/genre/list", nil)
+	resp, err := instance.Client.R().
+		SetHeader("Accept", "application/json").
+		Get(url)
 	if err != nil {
-		respondWithError(c, "Failed to fetch genres", err)
-		return
+		log.Fatal(err)
 	}
 
-	var genres []Genre
-	if err := json.Unmarshal(resp.Body, &genres); err != nil {
-		respondWithError(c, "Failed to parse genres", err)
-		return
+	var result GenreResponse
+	if err := json.Unmarshal(resp.Body(), &result); err != nil {
+		log.Fatal(err)
 	}
 
-	for i, genre := range genres {
-		count, err := getAnimeCountFromKitsu(genre.Title)
-		if err != nil {
-			count = 0
-		}
-		genres[i].Count = count
-	}
-
-	c.JSON(http.StatusOK, genres)
-}
-
-func getAnimeCountFromKitsu(genreName string) (int, error) {
-	url := fmt.Sprintf("https://kitsu.io/api/edge/anime?filter[categories]=%s&page[limit]=1", genreName)
-
-	client := httpClient.NewHttpClient("")
-	resp, err := client.Get(url, map[string]string{
-		"Accept": "application/vnd.api+json",
-	})
-
-	if err != nil {
-		return 0, err
-	}
-
-	var result struct {
-		Data []interface{} `json:"data"`
-		Meta struct {
-			Count int `json:"count"`
-		} `json:"meta"`
-	}
-
-	if err := json.Unmarshal(resp.Body, &result); err != nil {
-		return 0, err
-	}
-
-	if result.Meta.Count == 0 {
-		return len(result.Data), nil
-	}
-
-	return result.Meta.Count, nil
-}
-
-func respondWithError(c *gin.Context, message string, err error) {
-	c.JSON(http.StatusInternalServerError, gin.H{
-		"error": fmt.Sprintf("%s: %v", message, err),
-	})
+	c.JSON(http.StatusOK, result.Data)
 }
